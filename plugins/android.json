@@ -31,11 +31,6 @@
         },
         "cordova-plugin-network-information": {
             "PACKAGE_NAME": "com.robhaenen.floow2"
-        },
-        "phonegap-facebook-plugin": {
-            "APP_ID": "674975182712952",
-            "APP_NAME": "cordova",
-            "PACKAGE_NAME": "com.robhaenen.floow2"
         }
     },
     "dependent_plugins": {}

@@ -5,15 +5,8 @@
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "displayName": "Floow2",
-    "dependencies": {
-        "phonegap-facebook-plugin": "^0.12.0"
-    },
+    "dependencies": {},
     "cordova": {
-        "plugins": {
-            "phonegap-facebook-plugin": {
-                "APP_ID": "674975182712952",
-                "APP_NAME": "cordova"
-            }
-        }
+        "plugins": {}
     }
 }
