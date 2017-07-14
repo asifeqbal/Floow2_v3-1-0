@@ -4,5 +4,16 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
-    "displayName": "Floow2"
+    "displayName": "Floow2",
+    "dependencies": {
+        "phonegap-facebook-plugin": "git+https://github.com/phonegap/phonegap-facebook-plugin.git"
+    },
+    "cordova": {
+        "plugins": {
+            "phonegap-facebook-plugin": {
+                "APP_ID": "674975182712952",
+                "APP_NAME": "cordova"
+            }
+        }
+    }
 }

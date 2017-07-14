@@ -28,6 +28,8 @@
             </intent-filter>
         </service>
         <service android:exported="false" android:name="com.adobe.phonegap.push.RegistrationIntentService" />
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/fb_app_id" />
+        <activity android:label="@string/fb_app_name" android:name="com.facebook.LoginActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
     </application>
     <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="25" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
