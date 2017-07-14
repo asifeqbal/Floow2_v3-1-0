@@ -6,7 +6,7 @@
     },
     "displayName": "Floow2",
     "dependencies": {
-        "phonegap-facebook-plugin": "git+https://github.com/phonegap/phonegap-facebook-plugin.git"
+        "phonegap-facebook-plugin": "^0.12.0"
     },
     "cordova": {
         "plugins": {

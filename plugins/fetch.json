@@ -68,7 +68,7 @@
     "phonegap-facebook-plugin": {
         "source": {
             "type": "registry",
-            "id": "https://github.com/phonegap/phonegap-facebook-plugin"
+            "id": "phonegap-facebook-plugin"
         },
         "is_top_level": true,
         "variables": {

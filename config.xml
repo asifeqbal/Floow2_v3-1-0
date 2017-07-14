@@ -104,7 +104,7 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
-    <plugin name="phonegap-facebook-plugin" spec="https://github.com/phonegap/phonegap-facebook-plugin">
+    <plugin name="phonegap-facebook-plugin" spec="^0.12.0">
         <variable name="APP_ID" value="674975182712952" />
         <variable name="APP_NAME" value="cordova" />
     </plugin>
