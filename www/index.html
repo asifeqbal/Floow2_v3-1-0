@@ -104,7 +104,14 @@
 
 		function onDeviceReady(){
 			alert('baaaa');
-			
+				var fbLoginSuccess = function (userData) {
+						alert("UserInfo: " + JSON.stringify(userData));
+				}
+
+					facebookConnectPlugin.login(["public_profile"],
+					fbLoginSuccess,
+					function (error) { alert("" + error) }
+					);
 			document.addEventListener("resume", onResume, false);
 			
 			var push = PushNotification.init({ "android": {"senderID": "114063791200"},
