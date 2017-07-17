@@ -1,176 +1,179 @@
+<!DOCTYPE html>
+<!--
+    Copyright (c) 2012-2016 Adobe Systems Incorporated. All rights reserved.
+
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
 <html>
+
 <head>
-<script src="https://www.gstatic.com/firebasejs/3.0.0/firebase.js"></script>
-<script type="text/javascript" src="cordova.js"></script>
-<script type="text/javascript" src="js/index.js"></script>
-<title>ZeroToApp</title>
-<style>
-  #messages { width: 40em; border: 1px solid grey; min-height: 20em; }
-  #messages img { max-width: 240px; max-height: 160px; display: block; }
-  #header { position: fixed; top: 0; background-color: white; }
-  .push { margin-bottom: 2em; }
-  @keyframes yellow-fade { 0% {background: #f2f2b8;} 100% {background: none;} }
-  .highlight { -webkit-animation: yellow-fade 2s ease-in 1; animation: yellow-fade 2s ease-in 1; }
-</style>
-<script>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
+    <!-- Good default declaration:
+    * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+    * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+    * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+        * Enable inline JS: add 'unsafe-inline' to default-src
+        * Enable eval(): add 'unsafe-eval' to default-src
+    * Create your own at http://cspisawesome.com
+    -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
 
-// Issue seems to be CordovaFacebook isn't defined? but it does exist in the correct subfolder... maybe it's not initialized correctly?
-
-function logInWithFacebook(){
-    CordovaFacebook.login({
-   permissions: ['email', 'user_likes'],
-   onSuccess: function(result) {
-      if(result.declined.length > 0) {
-         alert("The User declined something!");
-      }
-      /* ... */
-   },
-   onFailure: function(result) {
-      if(result.cancelled) {
-         alert("The user doesn't like my app");
-      } else if(result.error) {
-         alert("There was an error:" + result.errorLocalized);
-      }
-   }
-});
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-  // Step 0: HTML defined, variables for elements
-  var messagesList = document.getElementById('messages'),
-      textInput = document.getElementById('text'),
-      sendButton = document.getElementById('send'),
-      login = document.getElementById('login'),
-      googleLogin = document.getElementById('google'),
-      facebookLogin = document.getElementById('facebook'),
-      signedIn = document.getElementById('loggedin'),
-      logout = document.getElementById('logout'),
-      usernameElm = document.getElementById('username'),
-      password = document.getElementById('password'),
-      username = "Web";
-
-  var config = {
-    apiKey: "MyapiKey",
- //   authDomain: "MyauthDomain",
-    databaseURL: "MydatabaseURL",
-    storageBucket: "MystorageBucket",
-    messagingSenderId: "123456789"
-  };
-
-  // Get the Firebase app and all primitives we'll use
-  var app = firebase.initializeApp(config),
-      database = app.database(),
-      auth = app.auth(),
-      storage = app.storage();
-
-  var databaseRef = database.ref().child('chat');
-  sendButton.addEventListener('click', function(evt) {
-    var chat = { name: username, message: textInput.value };
-    databaseRef.push().set(chat);
-    textInput.value = '';
-  });
-  // Listen for when child nodes get added to the collection
-  databaseRef.on('child_added', function(snapshot) {
-    // Get the chat message from the snapshot and add it to the UI
-    var chat = snapshot.val();
-    addMessage(chat);
-  });
-
-  // Show a popup when the user asks to sign in with Google
-  googleLogin.addEventListener('click', function(e) {
-    auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
-  });
-  // Allow the user to sign out
-  logout.addEventListener('click', function(e) {
-    auth.signOut();
-  });
-  // When the user signs in or out, update the username we keep for them
-  auth.onAuthStateChanged(function(user) {
-    if (user) {
-      setUsername(user.displayName);
-    }
-    else {
-      // User signed out, set a default username
-      setUsername("Web");
-    }
-  });
-
-  function handleFileSelect(e) {
-    var file = e.target.files[0];
-    // Get a reference to the location where we'll store our photos
-    var storageRef = storage.ref().child('chat_photos');
-
-    // Get a reference to store file at photos/<FILENAME>.jpg
-    var photoRef = storageRef.child(file.name);
-    // Upload file to Firebase Storage
-    var uploadTask = photoRef.put(file);
-    uploadTask.on('state_changed', null, null, function() {
-      // When the image has successfully uploaded, we get its download URL
-      var downloadUrl = uploadTask.snapshot.downloadURL;
-      // Set the download URL to the message box, so that the user can send it to the database
-      textInput.value = downloadUrl;
-    });
-  }
-  file.addEventListener('change', handleFileSelect, false);
-  function setUsername(newUsername) {
-    if (newUsername == null) {
-        newUsername = "Web";
-    }
-    console.log(newUsername);
-    username = newUsername;
-    var isLoggedIn = username != 'Web';
-    usernameElm.innerText = newUsername;
-    logout.style.display = isLoggedIn ? '' : 'none';
-    facebookLogin.style.display = isLoggedIn ? 'none' : '';
-    googleLogin.style.display = isLoggedIn ? 'none' : '';
-  }
-  function addMessage(chat) {
-    var li = document.createElement('li');
-    var nameElm = document.createElement('h4');
-    nameElm.innerText = chat.name;
-    li.appendChild(nameElm);
-    li.className = 'highlight';
-    if ( chat.message.indexOf("https://firebasestorage.googleapis.com/") == 0
-      || chat.message.indexOf("https://lh3.googleusercontent.com/") == 0
-      || chat.message.indexOf("http://pbs.twimg.com/") == 0
-      || chat.message.indexOf("data:image/") == 0) {
-      var imgElm = document.createElement("img");
-      imgElm.src = chat.message;
-      li.appendChild(imgElm);
-    }
-    else {
-      var messageElm = document.createElement("span");
-      messageElm.innerText = chat.message;
-      li.appendChild(messageElm);
-    }
-    messagesList.appendChild(li);
-    li.scrollIntoView(false);
-    sendButton.scrollIntoView(false);
-  }
-  //window.app = app; // NOTE: just for debugging
-  //for (var i=0; i < 10; i++) addMessage({ name: "Web", message: ''+i });
-  setUsername('Web');
-});
-</script>
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <style>
+		html, body{width:100%; height:100%;}
+		body{margin:0; padding:0;}
+		#blanker{background-image:url('loader.gif'); background-repeat:no-repeat; background-position: center center; display:block; z-index:9998; background-size:150px; position:fixed; top:0;left:0; height:100%; width:100%; background-color:#12ccb4;}
+		#offline-screen{width:100%; height:130%; background:url('connectionlost.png') no-repeat center center; background-color: #12CCB4; background-size:contain; display:none; z-index:9999; position:fixed; top:0; left:0;}
+	</style>
 </head>
+
 <body>
-<div id="fb-root"></div>
-  <div id='header'>
-    <label for='username'><img src="https://www.gstatic.com/images/icons/material/system/1x/account_box_black_24dp.png" width="24"/></label>
-    <span id='username'></span>
-    <span id='login'>
-      <button id='google' class='idp-button'>Sign in with Google</button>
-      <button id='facebook' class='idp-button'>Sign in with Facebook</button>
-    </span>
-    <button id='logout' class='idp-button'>Sign out</button>
-  </div>
-  <div class="push"></div>
-  <ul id='messages'></ul>
-  <div id='footer'>
-    <img src="https://www.gstatic.com/images/icons/material/system/1x/add_a_photo_black_24dp.png" width="24" onClick="logInWithFacebook();"/>
-    <input type="file" id="file" name="file" />
-    <input id='text'></input>
-    <button id='send'>Send</button>
-  </div>
-</body>
+	<div id="blanker"></div>
+	<div id="offline-screen"></div>
+	<div class="social-button-facebook button_inline" onclick="browse();"></div>
+	
+	<iframe src="http://www.floow2.com/fl2-en-mobile.html" name="container-frame" id="container-frame" onload="loaded();" seamless="seamless" width="100%" height="100%" style="border:none; position:absolute;"></iframe>
+       
+	<script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>   
+    <script type="text/javascript">
+		// Initialize local vars
+		var deviceId;
+		var flag = true;
+		//var notificationFlag = true;
+		
+		document.getElementById('offline-screen').style.height = document.body.clientHeight+'px';
+		document.addEventListener("deviceready",onDeviceReady,false);
+	
+		function loaded(){
+			document.getElementById('blanker').style.display = 'none';
+		}
+		var receiveMessage = function receiveMessage(e){
+			switch (e.data) {
+				case 'setBlanker':
+					document.getElementById('blanker').style.display = 'block';
+					break;
+				case 'removeBlanker':
+					document.getElementById('blanker').style.display = 'none'; 
+					break;
+			}
+		};			
+
+		window.addEventListener("message", receiveMessage, false);
+
+		function checkLanguage() {
+
+          //  alert('checkLanguage');
+            navigator.globalization.getPreferredLanguage(function (language) {
+             var lang = language.value;
+             var res = lang.split("-");
+             //alert(''+res[0]);
+             if(res[0] == 'en'){
+              //alert('if working');
+             document.getElementById('container-frame').src = 'http://www.floow2.com/fl2-en-mobile.html';
+             }
+             else{
+                //  alert('else working');
+                document.getElementById('container-frame').src = 'http://www.floow2.com/floow2-nl-mobiel.html';
+                }
+            },
+              function () {alert('Error getting language\n');}
+          );
+        }
+		
+
+		function onDeviceReady(){
+			alert('hello');
+			CordovaFacebook.login({
+			   permissions: ['email', 'user_friends'],
+				   onSuccess: function(result) {
+					  if(result.declined.length > 0) {
+				
+						 alert("The User declined something!");
+					  }
+					  /* ... */
+					},
+					
+				   onFailure: function(result) {
+					  if(result.cancelled) {
+					
+						 alert("The user doesn't like my app");
+					  } else if(result.error) {
+						 alert("There was an error:" + result.errorLocalized);
+					  }
+				   }
+			});
+				
+			document.addEventListener("resume", onResume, false);
+			
+			var push = PushNotification.init({ "android": {"senderID": "114063791200"},
+			"ios": {"alert": "true", "badge": "true", "sound": "true"}, "windows": {} } );
+
+			push.on('registration', function(data) {
+				deviceId = data.registrationId;
+			//	alert('id:' +  deviceId );	
+				checkLanguage();				
+			}); 
+			
+			push.on('error', function(e) {
+				notificationFlag = false;
+				checkLanguage();
+			}); 
+
+			push.on('notification', function(data) {
+				navigator.notification.alert(
+                    data.message,         // message
+                    null,                 // callback
+                    data.title,           // title
+                    'Ok'                  // buttonName
+				);			
+			});
+			
+			// Blanker on change
+			document.addEventListener("online", doWhenOnline, false);
+			document.addEventListener("offline", doWhenOffline, false);
+			var networkState = navigator.connection.type;
+
+			if(networkState == Connection.NONE) {
+				doWhenOffline();
+			}
+			else{
+				doWhenOnline();
+			} 
+		}
+		
+		function onResume() {
+			// Handle the resume event			
+			checkLanguage();
+		}
+		function doWhenOnline(){
+			document.getElementById('offline-screen').style.display = 'none';
+		}
+		function doWhenOffline(){				
+			document.getElementById('offline-screen').style.display = 'block';
+		}
+    </script>
+	
+</body>    
+
 </html>
