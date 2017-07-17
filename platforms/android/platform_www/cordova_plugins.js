@@ -72,6 +72,14 @@ module.exports = [
         "clobbers": [
             "Connection"
         ]
+    },
+    {
+        "id": "cordova-plugin-facebook.CordovaFacebook",
+        "file": "plugins/cordova-plugin-facebook/www/CordovaFacebook.js",
+        "pluginId": "cordova-plugin-facebook",
+        "clobbers": [
+            "CordovaFacebook"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -84,7 +92,8 @@ module.exports.metadata =
     "cordova-plugin-whitelist": "1.2.2",
     "cordova-plugin-splashscreen": "4.0.3",
     "cordova-plugin-globalization": "1.0.7",
-    "cordova-plugin-network-information": "1.3.3"
+    "cordova-plugin-network-information": "1.3.3",
+    "cordova-plugin-facebook": "0.2.2"
 };
 // BOTTOM OF METADATA
 });

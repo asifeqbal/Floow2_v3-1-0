@@ -31,6 +31,11 @@
         },
         "cordova-plugin-network-information": {
             "PACKAGE_NAME": "com.robhaenen.floow2"
+        },
+        "cordova-plugin-facebook": {
+            "FACEBOOK_APP_ID": "674975182712952",
+            "FACEBOOK_DISPLAY_NAME": "cordova",
+            "PACKAGE_NAME": "com.robhaenen.floow2"
         }
     },
     "dependent_plugins": {}

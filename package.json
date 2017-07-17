@@ -5,8 +5,15 @@
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "displayName": "Floow2",
-    "dependencies": {},
+    "dependencies": {
+        "cordova-plugin-facebook": "^0.2.2"
+    },
     "cordova": {
-        "plugins": {}
+        "plugins": {
+            "cordova-plugin-facebook": {
+                "FACEBOOK_DISPLAY_NAME": "cordova",
+                "FACEBOOK_APP_ID": "674975182712952"
+            }
+        }
     }
 }
