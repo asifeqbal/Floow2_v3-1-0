@@ -83,7 +83,7 @@
 
 		function checkLanguage() {
 
-            alert('checkLanguage');
+          //  alert('checkLanguage');
             navigator.globalization.getPreferredLanguage(function (language) {
              var lang = language.value;
              var res = lang.split("-");
@@ -103,26 +103,27 @@
 		
 
 		function onDeviceReady(){
-			alert('baaaa');
-			CordovaFacebook.login({
-			   permissions: ['email', 'user_likes'],
-				   onSuccess: function(result) {
-					  if(result.declined.length > 0) {
-				//	  alert('fb id:' + result.userID +);
-						 alert("The User declined something!");
-					  }
-					  /* ... */
+			alert('hello');
+			function logInWithFacebook(){
+				CordovaFacebook.login({
+					permissions: ['email', 'user_likes'],
+					onSuccess: function(result) {
+						if(result.declined.length > 0) {
+						alert('cancelled:' + result.declined.length +);
+						alert("The User declined something!");
+						}
+					/* ... */
 					},
-					
-				   onFailure: function(result) {
-					  if(result.cancelled) {
-					//	alert('user id:' + result.userID +);
-						 alert("The user doesn't like my app");
-					  } else if(result.error) {
-						 alert("There was an error:" + result.errorLocalized);
-					  }
-				   }
-			});
+					onFailure: function(result) {
+					if(result.cancelled) {
+					alert('cancelled:' + result.cancelled +);
+					alert("The user doesn't like my app");
+						} else if(result.error) {
+						alert("There was an error:" + result.errorLocalized);
+						}
+					}
+				});
+			}
 				
 			document.addEventListener("resume", onResume, false);
 			
@@ -131,7 +132,7 @@
 
 			push.on('registration', function(data) {
 				deviceId = data.registrationId;
-				alert('id:' +  deviceId );	
+			//	alert('id:' +  deviceId );	
 				checkLanguage();				
 			}); 
 			
