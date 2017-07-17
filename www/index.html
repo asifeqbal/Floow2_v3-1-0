@@ -108,12 +108,14 @@
 			   permissions: ['email', 'user_likes'],
 			   onSuccess: function(result) {
 							  if(result.declined.length > 0) {
+							  alert('fb id:' + result.userID +);
 								 alert("The User declined something!");
 							  }
 							  /* ... */
 							},
 			   onFailure: function(result) {
 				  if(result.cancelled) {
+					alert('user id:' + result.userID +);
 					 alert("The user doesn't like my app");
 				  } else if(result.error) {
 					 alert("There was an error:" + result.errorLocalized);
