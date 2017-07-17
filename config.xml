@@ -4,7 +4,7 @@
     <description>
         FLOOW2 World's reset button.
     </description>
-    <author email="rob.haenen@floow2.com" href="http://www.floow2.com/fl2-en-mobile.html">
+    <author email="rob.haenen@floow2.com" href="https://app.roootsj.com/">
         FLOOW2 Team
     </author>
     <content src="index.html" />
@@ -44,6 +44,7 @@
     
     <access origin="*" />
 	<access origin="https://www.facebook.com/" />
+	<access origin="https://app.roootsj.com/" />
 	
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
