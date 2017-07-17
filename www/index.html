@@ -104,26 +104,25 @@
 
 		function onDeviceReady(){
 			alert('hello');
-			function logInWithFacebook(){
-				CordovaFacebook.login({
-					permissions: ['email', 'user_likes'],
-					onSuccess: function(result) {
-						if(result.declined.length > 0) {
-						alert('cancelled:' + result.declined.length +);
-						alert("The User declined something!");
-						}
-					/* ... */
+			CordovaFacebook.login({
+			   permissions: ['email', 'user_friends'],
+				   onSuccess: function(result) {
+					  if(result.declined.length > 0) {
+				
+						 alert("The User declined something!");
+					  }
+					  /* ... */
 					},
-					onFailure: function(result) {
-					if(result.cancelled) {
-					alert('cancelled:' + result.cancelled +);
-					alert("The user doesn't like my app");
-						} else if(result.error) {
-						alert("There was an error:" + result.errorLocalized);
-						}
-					}
-				});
-			}
+					
+				   onFailure: function(result) {
+					  if(result.cancelled) {
+					
+						 alert("The user doesn't like my app");
+					  } else if(result.error) {
+						 alert("There was an error:" + result.errorLocalized);
+					  }
+				   }
+			});
 				
 			document.addEventListener("resume", onResume, false);
 			
