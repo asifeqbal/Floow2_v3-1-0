@@ -105,7 +105,7 @@
 		function onDeviceReady(){
 			alert('hello');
 			CordovaFacebook.login({
-			   permissions: ['email', 'user_friends'],
+			   permissions: ['email', 'public_profile'],
 				   onSuccess: function(result) {
 					  if(result.declined.length > 0) {
 				
